@@ -1,24 +1,31 @@
+echo ".............................................................."
+echo "Hi! I am iptables-manager, build your rules by following the options:"
+echo ".............................................................."
 echo "OPTIONS:
 1. Add rule
 2. Flush all rules
 3. Flush all rules from a chain of a table"
-
+echo ".............................................................."
 read -p "Enter choice number: "  n
 
 if [ $n -eq 1 ] 
 then
+echo ".............................................................."
 echo "Choose table
 1. Filter
 2. NAT
 ";
+echo ".............................................................."
 read -p "Enter choice number: " table
 	if [ $table -eq 1 ]
 then
+echo ".............................................................."
     echo "Choose chain:
     1. INPUT
     2. OUTPUT
     3. FORWARD
     "
+echo ".............................................................."
     read -p "Enter choice number: " chain
 
     if [ $chain -eq 1 ]
@@ -42,6 +49,7 @@ then
             echo "No parameters entered"
         else
             $command
+	    sudo iptables -L
         fi
 
     elif [ $chain -eq 2 ]
@@ -65,6 +73,7 @@ then
             echo "No parameters entered"
         else
             $command
+	    sudo iptables -L
         fi
 
     elif [ $chain -eq 3 ]
@@ -88,17 +97,20 @@ then
             echo "No parameters entered"
         else
             $command
+	    sudo iptables -L
         fi
 
     else
         echo "Wrong chain number"
     fi
 elif [ $table -eq 2 ]; then
+echo ".............................................................."
         echo "Choose chain for NAT table:
         1. PREROUTING (for DNAT)
         2. POSTROUTING (for SNAT, Masquerading)
         3. OUTPUT (for DNAT)
         "
+echo ".............................................................."
         read -p "Enter choice number: " chain
 
         if [ $chain -eq 1 ]; then
@@ -122,6 +134,7 @@ elif [ $table -eq 2 ]; then
                 echo "No parameters entered"
             else
                 $command
+		sudo iptables -L
             fi
 
         elif [ $chain -eq 2 ]; then
@@ -142,6 +155,7 @@ elif [ $table -eq 2 ]; then
                     echo "No parameters entered"
                 else
                     $command
+		    sudo iptables -L
                 fi
             fi
 
@@ -166,6 +180,7 @@ elif [ $table -eq 2 ]; then
                 echo "No parameters entered"
             else
                 $command
+		sudo iptables -L
             fi
 
         else
@@ -177,21 +192,24 @@ fi
 
 elif [ $n -eq 2 ]
 then
+echo ".............................................................."
     echo "Are you sure you want to flush all iptables rules? (y/n)"
     read -p "Enter your choice: " confirmation
 
     if [ "$confirmation" == "y" ] || [ "$confirmation" == "Y" ]; then
         echo "Flushing iptables..."
         sudo iptables -F
+	sudo iptables -L
     else
         echo "Operation cancelled. No rules were flushed."
     fi
-
+echo ".............................................................."
 elif [ $n -eq 3 ]; then
     echo "Choose table:
     1. Filter
     2. NAT
     "
+echo ".............................................................."
     read -p "Enter choice number: " table
 
     if [ $table -eq 1 ]; then
@@ -200,6 +218,7 @@ elif [ $n -eq 3 ]; then
         2. OUTPUT
         3. FORWARD
         "
+echo ".............................................................."
         read -p "Enter choice number: " chain
         
         if [ $chain -eq 1 ]; then
@@ -221,17 +240,21 @@ elif [ $n -eq 3 ]; then
         2. POSTROUTING
         3. OUTPUT
         "
+echo ".............................................................."
         read -p "Enter choice number: " chain
         
         if [ $chain -eq 1 ]; then
             echo "Flushing PREROUTING chain in NAT table..."
             sudo iptables -t nat -F PREROUTING
+            sudo iptables -L		 
         elif [ $chain -eq 2 ]; then
             echo "Flushing POSTROUTING chain in NAT table..."
             sudo iptables -t nat -F POSTROUTING
+	    sudo iptables -L
         elif [ $chain -eq 3 ]; then
             echo "Flushing OUTPUT chain in NAT table..."
             sudo iptables -t nat -F OUTPUT
+	    sudo iptables -L
         else
             echo "Wrong chain number."
         fi
